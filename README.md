@@ -25,7 +25,9 @@ There are several things but the most important will be to fix the async calls a
 
 ## Install & Configuration
 ### Get the code
-Goodwe library is required, for this I recommend the usage of pip (for now) to install it `opkg install python3-pip` and `pip3 install goodwe`
+Goodwe library is required, for this I recommend the usage of pip (for now) to install it `opkg install python3-pip` 
+GoodWe requires dataclasses, in Venus OS it resides within python3-modules `opkg install python3-modules`
+GoodWe module `pip3 install goodwe`
 
 Grab a copy of this repo and copy into your fata folder ex: `/data/`  `/data/dbus-goodwe-em-pvinverter`.
 After that call the install.sh script.
