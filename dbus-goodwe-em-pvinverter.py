@@ -112,39 +112,33 @@ class DbusGoodWeEMService:
   def _update(self):   
     try:
 
-       config = self._get_config()
-       str(config['DEFAULT']['Phase'])
-    
+       config = self._get_config()    
        #get data from GoodWe EM
-       meter_data = asyncio.run(self._get_goodwe_data(config['ONPREMISE']['HOST']))
-
-       pvinverter_phase = str(config['DEFAULT']['Phase'])
-       
+       meter_data = asyncio.run(self._get_goodwe_data(config['ONPREMISE']['HOST']))       
        #send data to DBus
        pre = '/Ac/L1'
         
-       if phase == pvinverter_phase:
-        power = meter_data['pgrid']
-        current = meter_data['igrid']
-        # total power equals power as GoodWe gives us the aggregatted ammount
-        total = power
-        voltage = meter_data['vgrid']
+       power = meter_data['pgrid']
+       current = meter_data['igrid']
+       # total power equals power as GoodWe gives us the aggregatted ammount
+       total = power
+       voltage = meter_data['vgrid']
 
-        #current = power / voltage
-        self._dbusservice[pre + '/Voltage'] = voltage
-        self._dbusservice[pre + '/Current'] = current
-        self._dbusservice[pre + '/Power'] = power
-        if power > 0:
-          self._dbusservice[pre + '/Energy/Forward'] = total/1000/60 
+       #current = power / voltage
+       self._dbusservice[pre + '/Voltage'] = voltage
+       self._dbusservice[pre + '/Current'] = current
+       self._dbusservice[pre + '/Power'] = power
+       if power > 0:
+        self._dbusservice[pre + '/Energy/Forward'] = total/1000/60 
           
-        else:
-          self._dbusservice[pre + '/Voltage'] = 0
-          self._dbusservice[pre + '/Current'] = 0
-          self._dbusservice[pre + '/Power'] = 0
-          self._dbusservice[pre + '/Energy/Forward'] = 0
+       else:
+        self._dbusservice[pre + '/Voltage'] = 0
+        self._dbusservice[pre + '/Current'] = 0
+        self._dbusservice[pre + '/Power'] = 0
+        self._dbusservice[pre + '/Energy/Forward'] = 0
           
-       self._dbusservice['/Ac/Power'] = self._dbusservice['/Ac/' + pvinverter_phase + '/Power']
-       self._dbusservice['/Ac/Energy/Forward'] = self._dbusservice['/Ac/' + pvinverter_phase + '/Energy/Forward']
+       self._dbusservice['/Ac/Power'] = self._dbusservice['/Ac/L1/Power']
+       self._dbusservice['/Ac/Energy/Forward'] = self._dbusservice['/Ac/L1/Energy/Forward']
        
        #logging
        logging.debug("House Consumption (/Ac/Power): %s" % (self._dbusservice['/Ac/Power']))
