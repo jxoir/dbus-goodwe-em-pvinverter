@@ -116,7 +116,7 @@ class DbusGoodWeEMService:
        str(config['DEFAULT']['Phase'])
     
        #get data from GoodWe EM
-       meter_data = self._get_goodwe_data(config['DEFAULT']['HOST'])
+       meter_data = self._get_goodwe_data(config['ONPREMISE']['HOST'])
 
        pvinverter_phase = str(config['DEFAULT']['Phase'])
        
