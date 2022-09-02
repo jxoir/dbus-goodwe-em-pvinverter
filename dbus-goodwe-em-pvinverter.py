@@ -17,7 +17,7 @@ import configparser # for config/ini file
  
 # goodwe library and asyncio
 import asyncio
-import lib.goodwe as goodwe
+import goodwe as goodwe
 
 # our own packages from victron
 sys.path.insert(1, os.path.join(os.path.dirname(__file__), '/opt/victronenergy/dbus-systemcalc-py/ext/velib_python'))
@@ -85,10 +85,10 @@ class DbusGoodWeEMService:
     
     return int(value)
 
-  def _get_goodwe_data(self, host):
+  async def _get_goodwe_data(self, host):
     # ToDo: Read sensor data unit
-    inverter = goodwe.connect(host)
-    meter_data = inverter.read_runtime_data()
+    inverter = await goodwe.connect(host)
+    meter_data = await inverter.read_runtime_data()
     
     # check for response
     if not meter_data:
@@ -115,7 +115,7 @@ class DbusGoodWeEMService:
        str(config['DEFAULT']['Phase'])
     
        #get data from GoodWe EM
-       meter_data = self._get_goodwe_data(config['ONPREMISE']['HOST'])
+       meter_data = asyncio.run(self._get_goodwe_data(config['ONPREMISE']['HOST']))
 
        pvinverter_phase = str(config['DEFAULT']['Phase'])
        
