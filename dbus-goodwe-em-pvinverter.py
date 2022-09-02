@@ -121,22 +121,21 @@ class DbusGoodWeEMService:
        pvinverter_phase = str(config['DEFAULT']['Phase'])
        
        #send data to DBus
-       for phase in ['L1', 'L2', 'L3']:
-        pre = '/Ac/' + phase
+       pre = '/Ac/L1'
         
-        if phase == pvinverter_phase:
-          power = meter_data['pgrid']
-          current = meter_data['igrid']
-          # total power equals power as GoodWe gives us the aggregatted ammount
-          total = power
-          voltage = meter_data['vgrid']
+       if phase == pvinverter_phase:
+        power = meter_data['pgrid']
+        current = meter_data['igrid']
+        # total power equals power as GoodWe gives us the aggregatted ammount
+        total = power
+        voltage = meter_data['vgrid']
 
-          #current = power / voltage
-          self._dbusservice[pre + '/Voltage'] = voltage
-          self._dbusservice[pre + '/Current'] = current
-          self._dbusservice[pre + '/Power'] = power
-          if power > 0:
-            self._dbusservice[pre + '/Energy/Forward'] = total/1000/60 
+        #current = power / voltage
+        self._dbusservice[pre + '/Voltage'] = voltage
+        self._dbusservice[pre + '/Current'] = current
+        self._dbusservice[pre + '/Power'] = power
+        if power > 0:
+          self._dbusservice[pre + '/Energy/Forward'] = total/1000/60 
           
         else:
           self._dbusservice[pre + '/Voltage'] = 0
@@ -206,17 +205,9 @@ def main():
           '/Ac/Voltage': {'initial': 0, 'textformat': _v},
           
           '/Ac/L1/Voltage': {'initial': 0, 'textformat': _v},
-          '/Ac/L2/Voltage': {'initial': 0, 'textformat': _v},
-          '/Ac/L3/Voltage': {'initial': 0, 'textformat': _v},
           '/Ac/L1/Current': {'initial': 0, 'textformat': _a},
-          '/Ac/L2/Current': {'initial': 0, 'textformat': _a},
-          '/Ac/L3/Current': {'initial': 0, 'textformat': _a},
           '/Ac/L1/Power': {'initial': 0, 'textformat': _w},
-          '/Ac/L2/Power': {'initial': 0, 'textformat': _w},
-          '/Ac/L3/Power': {'initial': 0, 'textformat': _w},
           '/Ac/L1/Energy/Forward': {'initial': None, 'textformat': _kwh},
-          '/Ac/L2/Energy/Forward': {'initial': None, 'textformat': _kwh},
-          '/Ac/L3/Energy/Forward': {'initial': None, 'textformat': _kwh},
         })
      
       logging.info('Connected to dbus, and switching over to gobject.MainLoop() (= event based)')
