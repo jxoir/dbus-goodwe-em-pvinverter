@@ -85,11 +85,10 @@ class DbusGoodWeEMService:
     
     return int(value)
 
- 
-  async def _get_goodwe_data(self, host):
+  def _get_goodwe_data(self, host):
     # ToDo: Read sensor data unit
-    inverter = await goodwe.connect(host)
-    meter_data = await inverter.read_runtime_data()
+    inverter = goodwe.connect(host)
+    meter_data = inverter.read_runtime_data()
     
     # check for response
     if not meter_data:
