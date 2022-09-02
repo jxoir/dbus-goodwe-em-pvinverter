@@ -25,8 +25,10 @@ There are several things but the most important will be to fix the async calls a
 
 ## Install & Configuration
 ### Get the code
-Goodwe library is required, for this I recommend the usage of pip (for now) to install it `opkg install python3-pip` 
+Goodwe library is required, for this I recommend the usage of pip (for now) to install it `opkg install python3-pip`
+
 GoodWe requires dataclasses, in Venus OS it resides within python3-modules `opkg install python3-modules`
+
 GoodWe module `pip3 install goodwe`
 
 Grab a copy of this repo and copy into your fata folder ex: `/data/`  `/data/dbus-goodwe-em-pvinverter`.
@@ -52,8 +54,9 @@ Within the project there is a file `/data/dbus-goodwe-em-pvinverter/config.ini` 
 | DEFAULT  | SignOfLifeLog  | Time in minutes how often a status is added to the log-file `current.log` with log-level INFO |
 | DEFAULT  | Deviceinstance | Unique ID identifying the goodwe-em in Venus OS |
 | DEFAULT  | CustomName | Name shown in Remote Console (e.g. name of pv inverter) |
-| DEFAULT  | Phase | Valid values L1, L2 or L3: represents the phase where pv inverter is feeding in |
 | ONPREMISE  | Host | IP or hostname of on-premise goodwe-em web-interface |
+| ONPREMISE  | Position | 0=AC input 1; 1=AC output; 2=AC input 2 |
+| ONPREMISE  | MaxPower | Max rated power (in Watts) of the inverter |
 
 
 ## Used documentation
