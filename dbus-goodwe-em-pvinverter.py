@@ -97,11 +97,11 @@ class DbusGoodWeEMService:
     
     return meter_data
  
-  def _goodwe_serial(self):
+  def _get_goodwe_serial(self):
     # Dummy function to retrieve a "serial" identifier, using custom name for now
     config = self._get_config()
     return config['DEFAULT']['CustomName']
-    
+
   def _sign_of_life(self):
     logging.info("--- Start: sign of life ---")
     logging.info("Last _update() call: %s" % (self._lastUpdate))
