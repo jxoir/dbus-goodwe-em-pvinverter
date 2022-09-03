@@ -268,25 +268,28 @@ def main():
       dbusservice['pvinverter'].add_path('/MaxPower', goodwe_inverter.pv_max_power, writeable=True)
 
       # create service for grid meter
-      dbusservice['grid'] = victron_dbus.create_dbus_service(base, 'http', goodwe_inverter.logical_connection, 
-      goodwe_inverter.device_instance, instance=goodwe_inverter.device_instance, product_id=goodwe_inverter.product_id,
-      product_name=goodwe_inverter.meter_product_name, custom_name=goodwe_inverter.meter_product_name, type="grid"  )
+      if goodwe_inverter.has_meter:
+        dbusservice['grid'] = victron_dbus.create_dbus_service(base, 'http', goodwe_inverter.logical_connection, 
+        goodwe_inverter.device_instance, instance=goodwe_inverter.device_instance, product_id=goodwe_inverter.product_id,
+        product_name=goodwe_inverter.meter_product_name, custom_name=goodwe_inverter.meter_product_name, type="grid"  )
 
 
-      dbusservice['grid'].add_path('/Ac/L1/Energy/Forward', None, writeable=True, gettextcallback = goodwe_inverter._kwh)
-      dbusservice['grid'].add_path('/Ac/L1/Energy/Reverse', None, writeable=True, gettextcallback = goodwe_inverter._kwh)
-      dbusservice['grid'].add_path('/Ac/Energy/Forward', None, writeable=True, gettextcallback = goodwe_inverter._kwh)
-      dbusservice['grid'].add_path('/Ac/Energy/Reverse', None, writeable=True, gettextcallback = goodwe_inverter._kwh)
-      dbusservice['grid'].add_path('/Ac/Power', 0, writeable=True, gettextcallback = goodwe_inverter._w)
-      dbusservice['grid'].add_path('/Ac/L1/Current', 0, writeable=True, gettextcallback = goodwe_inverter._a)
-      dbusservice['grid'].add_path('/Ac/L1/Voltage', 0, writeable=True, gettextcallback = goodwe_inverter._v)
-      dbusservice['grid'].add_path('/Ac/L1/Power', 0, writeable=True, gettextcallback = goodwe_inverter._w)
-      dbusservice['grid'].add_path('/Position', goodwe_inverter.pv_inverter_position, writeable=True)
-      
+        dbusservice['grid'].add_path('/Ac/L1/Energy/Forward', None, writeable=True, gettextcallback = goodwe_inverter._kwh)
+        dbusservice['grid'].add_path('/Ac/L1/Energy/Reverse', None, writeable=True, gettextcallback = goodwe_inverter._kwh)
+        dbusservice['grid'].add_path('/Ac/Energy/Forward', None, writeable=True, gettextcallback = goodwe_inverter._kwh)
+        dbusservice['grid'].add_path('/Ac/Energy/Reverse', None, writeable=True, gettextcallback = goodwe_inverter._kwh)
+        dbusservice['grid'].add_path('/Ac/Power', 0, writeable=True, gettextcallback = goodwe_inverter._w)
+        dbusservice['grid'].add_path('/Ac/L1/Current', 0, writeable=True, gettextcallback = goodwe_inverter._a)
+        dbusservice['grid'].add_path('/Ac/L1/Voltage', 0, writeable=True, gettextcallback = goodwe_inverter._v)
+        dbusservice['grid'].add_path('/Ac/L1/Power', 0, writeable=True, gettextcallback = goodwe_inverter._w)
+        dbusservice['grid'].add_path('/Position', goodwe_inverter.pv_inverter_position, writeable=True)
+        
+
+      # pass dbus object to goodwe class
+      goodwe_inverter.set_dbus_service(dbusservice)
       # add _update function 'timer'
       # update every 5 seconds to prevent blocking by GoodWe Inverter
-      goodwe_inverter.set_dbus_service(dbusservice)
-      gobject.timeout_add(5000, goodwe_inverter.update_dbus_pv_inverter) # pause 250ms before the next request
+      gobject.timeout_add(5000, goodwe_inverter.update_dbus_pv_inverter) # pause 5000ms before the next request
 
       logging.info('Connected to dbus, and switching over to gobject.MainLoop() (= event based)')
       mainloop = gobject.MainLoop()
