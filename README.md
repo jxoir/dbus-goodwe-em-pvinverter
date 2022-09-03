@@ -51,13 +51,13 @@ Within the project there is a file `/data/dbus-goodwe-em-pvinverter/config.ini` 
 | Section  | Config vlaue | Explanation |
 | ------------- | ------------- | ------------- |
 | DEFAULT  | AccessType | Fixed value 'OnPremise' |
-| DEFAULT  | SignOfLifeLog  | Time in minutes how often a status is added to the log-file `current.log` with log-level INFO |
 | DEFAULT  | Deviceinstance | Unique ID identifying the goodwe-em in Venus OS |
 | DEFAULT  | CustomName | Name shown in Remote Console (e.g. name of pv inverter) |
 | ONPREMISE  | Host | IP or hostname of on-premise goodwe-em web-interface |
 | ONPREMISE  | Position | 0=AC input 1; 1=AC output; 2=AC input 2 |
 | ONPREMISE  | MaxPower | Max rated power (in Watts) of the inverter |
-
+| ONPREMISE  | HasMeter | 0 or 1 (false or true), use it when you have a smartmeter connected to the inverter |
+| SMARTMETER  | ProductName | Name shown in Remote Console (e.g. name of pv inverter) |
 
 ## Used documentation
 - https://github.com/victronenergy/venus/wiki/dbus#pv-inverters   DBus paths for Victron namespace
