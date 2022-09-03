@@ -141,21 +141,21 @@ class GoodWeEMService:
       # igrid current ac on grid (not differentiated by the meter)
       self.pv_current = meter_data['igrid']
       # total power equals power as GoodWe gives us the aggregatted ammount
-      self.pv_total = self.pv_power
+      self.pv_total = meter_data['e_total']
       # total voltage on AC line (not differentiated by the meter)
       self.pv_voltage = meter_data['vgrid']
 
       # Only if we have a smart meter setted up, almost all the values are the same with the exception of house_consumption
       if self.has_meter:
         # ToDo: review and fix -abs, we're negative abs as Victron expects negative values on export
-        self.meter_forward = -abs(meter_data['pgrid'])
+        self.meter_forward = meter_data['pgrid'] * -1
         # reverse is "sold to the grid"
-        self.meter_reverse = -abs(meter_data['pgrid'] - meter_data['house_consumption']) # sold to the grid
+        self.meter_reverse = (meter_data['pgrid'] * -1) - meter_data['house_consumption'] # sold to the grid
         # house consumption is total AC load
         self.meter_house_consumption = meter_data['house_consumption']
         # igrid = AC current, not differentiated by the smart meter
         self.meter_current = meter_data['igrid']
-        self.meter_total_power = -abs(meter_data['pgrid'])
+        self.meter_power = meter_data['pgrid'] * -1
         self.meter_voltage = meter_data['vgrid']
 
     except Exception as e:
@@ -178,7 +178,7 @@ class GoodWeEMService:
       dbus_service['pvinverter'][pre + '/Current'] = self.pv_current
       dbus_service['pvinverter'][pre + '/Power'] = self.pv_power
       if self.pv_power > 0:
-        dbus_service['pvinverter'][pre + '/Energy/Forward'] = self.pv_total/1000/60 
+        dbus_service['pvinverter'][pre + '/Energy/Forward'] = self.pv_total
       else:
         dbus_service['pvinverter'][pre + '/Voltage'] = 0
         dbus_service['pvinverter'][pre + '/Current'] = 0
@@ -196,13 +196,13 @@ class GoodWeEMService:
           #current = power / voltage
           dbus_service['grid'][pre + '/Voltage'] = self.meter_voltage
           dbus_service['grid'][pre + '/Current'] = self.meter_current
-          dbus_service['grid'][pre + '/Power'] = self.meter_total_power
+          dbus_service['grid'][pre + '/Power'] = self.meter_power
           
-          dbus_service['grid']['/Ac/Energy/Forward'] = self.meter_forward/1000/60 
-          dbus_service['grid']['/Ac/Energy/Reverse'] = self.meter_reverse/1000/60 
-          dbus_service['grid']['/Ac/L1/Energy/Forward'] = self.meter_forward/1000/60 
-          dbus_service['grid']['/Ac/L1/Energy/Reverse'] = self.meter_reverse/1000/60 
-          dbus_service['grid']['/Ac/Power'] = self.meter_total_power          
+          dbus_service['grid']['/Ac/Energy/Forward'] = self.meter_forward
+          dbus_service['grid']['/Ac/Energy/Reverse'] = self.meter_reverse
+          dbus_service['grid']['/Ac/L1/Energy/Forward'] = self.meter_forward 
+          dbus_service['grid']['/Ac/L1/Energy/Reverse'] = self.meter_reverse
+          dbus_service['grid']['/Ac/Power'] = self.meter_power          
 
       #logging
       logging.debug("House Consumption (/Ac/Power): %s" % (dbus_service['pvinverter']['/Ac/Power']))
