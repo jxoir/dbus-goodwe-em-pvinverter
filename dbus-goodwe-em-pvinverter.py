@@ -178,7 +178,7 @@ class GoodWeEMService:
       dbus_service['pvinverter'][pre + '/Current'] = self.pv_current
       dbus_service['pvinverter'][pre + '/Power'] = self.pv_power
       if self.pv_power > 0:
-        dbus_service['pvinverter'][pre + '/Energy/Forward'] = self.pv_total
+        dbus_service['pvinverter'][pre + '/Energy/Forward'] = self.pv_total # already in kWh
       else:
         dbus_service['pvinverter'][pre + '/Voltage'] = 0
         dbus_service['pvinverter'][pre + '/Current'] = 0
@@ -198,10 +198,10 @@ class GoodWeEMService:
           dbus_service['grid'][pre + '/Current'] = self.meter_current
           dbus_service['grid'][pre + '/Power'] = self.meter_power
           
-          dbus_service['grid']['/Ac/Energy/Forward'] = self.meter_forward
-          dbus_service['grid']['/Ac/Energy/Reverse'] = self.meter_reverse
-          dbus_service['grid']['/Ac/L1/Energy/Forward'] = self.meter_forward 
-          dbus_service['grid']['/Ac/L1/Energy/Reverse'] = self.meter_reverse
+          dbus_service['grid']['/Ac/Energy/Forward'] = self.meter_forward / 1000 / 60
+          dbus_service['grid']['/Ac/Energy/Reverse'] = self.meter_reverse / 1000 / 60
+          dbus_service['grid']['/Ac/L1/Energy/Forward'] = self.meter_forward / 1000 / 60
+          dbus_service['grid']['/Ac/L1/Energy/Reverse'] = self.meter_reverse / 1000 / 60
           dbus_service['grid']['/Ac/Power'] = self.meter_power          
 
       #logging
