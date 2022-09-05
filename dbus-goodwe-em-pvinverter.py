@@ -186,6 +186,7 @@ class GoodWeEMService:
         dbus_service['pvinverter'][pre + '/Energy/Forward'] = 0
           
       dbus_service['pvinverter']['/Ac/Power'] = dbus_service['pvinverter']['/Ac/L1/Power']
+      dbus_service['pvinverter']['/Ac/Current'] = dbus_service['pvinverter']['/Ac/L1/Current']
       dbus_service['pvinverter']['/Ac/Energy/Forward'] = dbus_service['pvinverter']['/Ac/L1/Energy/Forward']
       
       # update grid meter only if it's configured
@@ -198,6 +199,7 @@ class GoodWeEMService:
           dbus_service['grid'][pre + '/Current'] = self.meter_current
           dbus_service['grid'][pre + '/Power'] = self.meter_power
           
+          # converting watts to kWh, sample 1 minute as required by forward and reverse
           dbus_service['grid']['/Ac/Energy/Forward'] = self.meter_forward / 1000 / 60
           dbus_service['grid']['/Ac/Energy/Reverse'] = self.meter_reverse / 1000 / 60
           dbus_service['grid']['/Ac/L1/Energy/Forward'] = self.meter_forward / 1000 / 60
